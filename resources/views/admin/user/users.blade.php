@@ -37,26 +37,69 @@
                         </tr>
                     </thead>
                     <tbody>
+                      @foreach($users as $user)
                         <tr>
-                            <td>Juan Dela Cruz</td>
-                            <td>juan@expensemanager.com</td>
-                            <td>administrator</td>
-                            <td>2019-03-21</td>
+                            <td>{{ $user->name }}</td>
+                            <td>{{ $user->email }}</td>
+                            <td>{{ $user->role->name }}</td>
+                            <td>{{ \Carbon\Carbon::parse($user->created_at)->toDateString() }}</td>
                         </tr>
-                        <tr>
-                            <td>Leo Ocampo</td>
-                            <td>leo@expensemanager.com</td>
-                            <td>user</td>
-                            <td>2019-03-21</td>
-                        </tr>
+                      @endforeach
                     </tbody>
                     </table>
                 </div>
                 <!-- /.card-body -->
                 </div>
                 <div class=float-right>
-                    <button type="button" class="btn btn-primary">Add User</button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addUser">Add User</button>
                 </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="ModalCenterTitle">Add User</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <form action="{{ route('addUser') }}" method="POST" id="addUserForm">
+                        
+                      {{ csrf_field() }}
+                      <div class="modal-body">
+                        <div class="form-group">
+                          <label for="name">Name</label>
+                          <input type="text" class="form-control" name="name">
+                        </div>
+                        <div class="form-group">
+                          <label for="email">Email Address</label>
+                          <input type="email" class="form-control" name="email">
+                        </div>
+                        <div class="form-group">
+                          <label for="password">Password</label>
+                          <input type="password" class="form-control" name="password">
+                        </div>
+                        <div class="form-group">
+                          <label for="roleSelect">Role</label>
+                          <select class="form-control" name="roleSelect">
+                            @foreach($roles as $role)
+                              <option>{{ $role->name }}</option>
+                            @endforeach
+                          </select>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                      </div>
+                    </form>
+
+                    </div>
+                  </div>
+                </div>
+
             </div>
         </div>
       </div><!-- /.container-fluid -->

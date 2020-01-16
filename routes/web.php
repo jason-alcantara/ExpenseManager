@@ -12,9 +12,18 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('layouts.login');
 });
 
 Route::get('/dashboard', 'AdminController@index')->name('dashboard');
 Route::get('/roles', 'AdminController@roles')->name('roles');
+Route::post('/roles/addRole', 'AdminController@addRole')->name('addRole');
+
 Route::get('/users', 'AdminController@users')->name('users');
+Route::post('/users/addUser', 'AdminController@addUser')->name('addUser');
+
+Route::get('/categories', 'AdminController@category')->name('categories');
+Route::post('/categories/addCategory', 'AdminController@addCategory')->name('addCategory');
+
+Route::get('/expenses', 'AdminController@expenses')->name('expenses');
+Route::post('/expenses/addExpense', 'AdminController@addExpense')->name('addExpense');
