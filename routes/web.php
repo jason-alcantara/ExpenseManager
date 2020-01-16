@@ -17,4 +17,5 @@ Route::get('/', function () {
 
 Route::get('/dashboard', 'AdminController@index')->name('dashboard');
 Route::get('/roles', 'AdminController@roles')->name('roles');
+Route::post('/roles/addRole', 'AdminController@addRole')->name('addRole');
 Route::get('/users', 'AdminController@users')->name('users');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Role;
 
 class AdminController extends Controller
 {
@@ -18,7 +19,26 @@ class AdminController extends Controller
 
     public function roles()
     {
-        return view('admin.user.roles');
+        $roles = Role::all();
+        return view('admin.user.roles', ['roles' => $roles]);
+    }
+
+    public function addRole(Request $request)
+    {
+        $this->validate($request,[
+            'displayName' => 'required',
+            'description' => 'required',
+        ]);
+
+        $role = new Role;
+
+        $role->name = $request->input('displayName');
+        $role->description = $request->input('description');
+
+        $role->save();
+
+        return redirect()->back();
+
     }
 
     public function users()

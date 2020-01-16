@@ -36,24 +36,56 @@
                         </tr>
                     </thead>
                     <tbody>
+                    @foreach($roles as $role)
                         <tr>
-                            <td>Administrator</td>
-                            <td>super user</td>
-                            <td>2019-03-21</td>
+                            <td>{{ $role->name }}</td>
+                            <td>{{ $role->description }}</td>
+                            <td>{{ \Carbon\Carbon::parse($role->created_at)->toDateString() }}</td>
                         </tr>
-                        <tr>
-                            <td>User</td>
-                            <td>can add expenses</td>
-                            <td>2019-03-21</td>
-                        </tr>
+                    @endforeach
                     </tbody>
                     </table>
                 </div>
                 <!-- /.card-body -->
                 </div>
                 <div class=float-right>
-                    <button type="button" class="btn btn-primary">Add Role</button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addRole">Add Role</button>
                 </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="addRole" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="ModalCenterTitle">Add Role</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <form action="/roles/addRole" method="POST" id="addRoleForm">
+                        
+                        {{ csrf_field() }}
+                        <div class="modal-body">
+                          <div class="form-group">
+                            <label for="displayName">Display Name</label>
+                            <input type="text" class="form-control" name="displayName">
+                          </div>
+                          <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" class="form-control" name="description">
+                          </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                          <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                      </form>
+
+                    </div>
+                  </div>
+                </div>
+
             </div>
         </div>
       </div><!-- /.container-fluid -->
