@@ -63,7 +63,7 @@
                         </button>
                       </div>
 
-                      <form action="/roles/addRole" method="POST" id="addRoleForm">
+                      <form action="{{ route('addRole') }}" method="POST" id="addRoleForm">
                         
                         {{ csrf_field() }}
                         <div class="modal-body">

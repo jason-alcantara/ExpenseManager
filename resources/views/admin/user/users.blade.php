@@ -37,18 +37,14 @@
                         </tr>
                     </thead>
                     <tbody>
+                      @foreach($users as $user)
                         <tr>
-                            <td>Juan Dela Cruz</td>
-                            <td>juan@expensemanager.com</td>
-                            <td>administrator</td>
-                            <td>2019-03-21</td>
+                            <td>{{ $user->name }}</td>
+                            <td>{{ $user->email }}</td>
+                            <td>{{ $user->role->name }}</td>
+                            <td>{{ \Carbon\Carbon::parse($user->created_at)->toDateString() }}</td>
                         </tr>
-                        <tr>
-                            <td>Leo Ocampo</td>
-                            <td>leo@expensemanager.com</td>
-                            <td>user</td>
-                            <td>2019-03-21</td>
-                        </tr>
+                      @endforeach
                     </tbody>
                     </table>
                 </div>
@@ -68,29 +64,38 @@
                           <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
+
+                      <form action="{{ route('addUser') }}" method="POST" id="addUserForm">
+                        
+                      {{ csrf_field() }}
                       <div class="modal-body">
-                        <form id="addUserForm">
-                          <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" id="name">
-                          </div>
-                          <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" class="form-control" id="email">
-                          </div>
-                          <div class="form-group">
-                            <label for="roleSelect">Role</label>
-                            <select class="form-control" id="roleSelect">
-                              <option>Administrator</option>
-                              <option>User</option>
-                            </select>
-                          </div>
-                        </form>
+                        <div class="form-group">
+                          <label for="name">Name</label>
+                          <input type="text" class="form-control" name="name">
+                        </div>
+                        <div class="form-group">
+                          <label for="email">Email Address</label>
+                          <input type="email" class="form-control" name="email">
+                        </div>
+                        <div class="form-group">
+                          <label for="password">Password</label>
+                          <input type="password" class="form-control" name="password">
+                        </div>
+                        <div class="form-group">
+                          <label for="roleSelect">Role</label>
+                          <select class="form-control" name="roleSelect">
+                            @foreach($roles as $role)
+                              <option>{{ $role->name }}</option>
+                            @endforeach
+                          </select>
+                        </div>
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-primary">Save</button>
                       </div>
+                    </form>
+
                     </div>
                   </div>
                 </div>

@@ -114,12 +114,12 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ url('categories') }}" class="nav-link">
                   <p>Expense Categories</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ url('expenses') }}" class="nav-link">
                   <p>Expenses</p>
                 </a>
               </li>
