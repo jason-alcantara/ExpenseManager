@@ -38,7 +38,7 @@
                     </thead>
                     <tbody>
                       @foreach($users as $user)
-                        <tr>
+                        <tr data-toggle="modal" data-target="#updateUser" data-uname="{{ $user->name }}" data-email="{{ $user->email }}" data-urole="{{ $user->role->name }}" data-uid="{{ $user->id }}">
                             <td>{{ $user->name }}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->role->name }}</td>
@@ -100,6 +100,55 @@
                   </div>
                 </div>
 
+                <!-- Update Modal -->
+                <div class="modal fade" id="updateUser" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="ModalCenterTitle">Update User</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <form action="{{ route('updateUser') }}" method="POST" id="updateUserForm">
+                        
+                      {{ csrf_field() }}
+                      <div class="modal-body">
+                        <div class="form-group">
+                          <label for="name">Name</label>
+                          <input type="text" class="form-control" name="name" id="name">
+                        </div>
+                        <div class="form-group">
+                          <label for="email">Email Address</label>
+                          <input type="email" class="form-control" name="email" id="email">
+                        </div>
+                        <div class="form-group">
+                          <label for="roleSelect">Role</label>
+                          <select class="form-control" name="roleSelect" id="roleSelect">
+                            @foreach($roles as $role)
+                              <option>
+                              {{ $role->name }}
+                              </option>
+                            @endforeach
+                          </select>
+                        </div>
+                        <input type="hidden" name="userId" id="uid" value="">
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="update">Update</button>
+                      </div>
+                    </form>
+                    <form action="{{ route('deleteUser') }}" method="POST">
+                      @csrf
+                      <input type="hidden" name="userId" id="id" value="">
+                      <button type="submit" class="btn btn-danger" id="delete" style="position:absolute; bottom:1em; left:1em;">Delete</button>
+                    </form>
+                    </div>
+                  </div>
+                </div>
+
             </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -108,5 +157,41 @@
 @endsection
 
 @section('scripts')
+<script>
+  $('#updateUser').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget)
+    var uname = button.data('uname')
+    var email = button.data('email')
+    var urole = button.data('urole')
+    var uid = button.data('uid')
 
+    var modal = $(this)
+
+    if(urole === "Administrator")
+    {
+      modal.find('#delete').attr('disabled', true)
+      modal.find('.modal-footer #update').attr('disabled', true)
+      modal.find('.modal-body #name').attr('readonly', true)
+      modal.find('.modal-body #name').val(uname)
+      modal.find('.modal-body #email').attr('readonly', true)
+      modal.find('.modal-body #email').val(email)
+      modal.find('.modal-body #roleSelect').attr('disabled', true)
+      modal.find('.modal-body #roleSelect').val(urole)
+    }
+    else
+    {
+      modal.find('#delete').attr('disabled', false)
+      modal.find('.modal-footer #update').attr('disabled', false)
+      modal.find('.modal-body #name').attr('readonly', false)
+      modal.find('.modal-body #name').val(uname)
+      modal.find('.modal-body #email').attr('readonly', false)
+      modal.find('.modal-body #email').val(email)
+      modal.find('.modal-body #roleSelect').attr('disabled', false)
+      modal.find('.modal-body #roleSelect').val(urole)
+      modal.find('.modal-body #uid').val(uid)
+      modal.find('#id').val(uid)
+    }
+    
+  })
+</script>
 @endsection

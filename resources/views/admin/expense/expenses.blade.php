@@ -37,18 +37,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Travel</td>
-                            <td>$230</td>
-                            <td>2019-03-21</td>
-                            <td>2019-03-21</td>
+                      @foreach($expenses as $expense)
+                        <tr data-toggle="modal" data-target="#updateExpense" data-category="{{ $expense->category->name }}" data-amount="{{ $expense->amount }}" data-entry="{{ $expense->entry_date }}" data-eid="{{ $expense->id }}">
+                            <td>{{ $expense->category->name }}</td>
+                            <td>${{ $expense->amount }}</td>
+                            <td>{{ $expense->entry_date }}</td>
+                            <td>{{ \Carbon\Carbon::parse($expense->created_at)->toDateString() }}</td>
                         </tr>
-                        <tr>
-                            <td>Travel</td>
-                            <td>$120</td>
-                            <td>2019-03-21</td>
-                            <td>2019-03-21</td>
-                        </tr>
+                      @endforeach
                     </tbody>
                     </table>
                 </div>
@@ -63,7 +59,7 @@
                   <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title" id="ModalCenterTitle">Add User</h5>
+                        <h5 class="modal-title" id="ModalCenterTitle">Add Expense</h5>
                           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>
@@ -100,6 +96,53 @@
                   </div>
                 </div>
 
+                <!-- Update Modal -->
+                <div class="modal fade" id="updateExpense" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="ModalCenterTitle">Update Expense</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+
+                      <form action="{{ route('updateExpense') }}" method="POST" id="updateExpenseForm">
+                        
+                      {{ csrf_field() }}
+                      <div class="modal-body">
+                        <div class="form-group">
+                          <label for="category">Expense Category</label>
+                          <select class="form-control" name="category" id="category">
+                          @foreach($categories as $category)
+                            <option>{{ $category->name }}</option>
+                          @endforeach
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="amount">Amount</label>
+                          <input type="text" class="form-control" name="amount" id="amount">
+                        </div>
+                        <div class="form-group">
+                          <label for="entry">Entry Date</label>
+                          <input type="date" class="form-control" name="entry" id="entry">
+                        </div>
+                        <input type="hidden" name="expenseId" id="eid" value="">
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                      </div>
+                    </form>
+                    <form action="{{ route('deleteExpense') }}" method="POST">
+                      @csrf
+                      <input type="hidden" name="expenseId" id="id" value="">
+                      <button type="submit" class="btn btn-danger" id="delete" style="position:absolute; bottom:1em; left:1em;">Delete</button>
+                    </form>
+                    </div>
+                  </div>
+                </div>
+
             </div>
         </div>
       </div><!-- /.container-fluid -->
@@ -108,5 +151,22 @@
 @endsection
 
 @section('scripts')
+<script>
+  $('#updateExpense').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget)
+    var category = button.data('category')
+    var amount = button.data('amount')
+    var entry = button.data('entry')
+    var eid = button.data('eid')
 
+    var modal = $(this)
+
+    modal.find('.modal-body #category').val(category)
+    modal.find('.modal-body #amount').val(amount)
+    modal.find('.modal-body #entry').val(entry)
+    modal.find('.modal-body #eid').val(eid)
+    modal.find('#id').val(eid)
+    
+  })
+</script>
 @endsection
