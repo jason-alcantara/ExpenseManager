@@ -27,12 +27,18 @@ Route::group(['middleware' => ['auth','admin']], function() {
 
     Route::get('/users', 'AdminController@users')->name('users');
     Route::post('/users/addUser', 'AdminController@addUser')->name('addUser');
+    Route::post('/roles/updateUser', 'AdminController@updateUser')->name('updateUser');
+    Route::post('/roles/deleteUser', 'AdminController@deleteUser')->name('deleteUser');
 
     Route::get('/categories', 'AdminController@category')->name('categories');
     Route::post('/categories/addCategory', 'AdminController@addCategory')->name('addCategory');
+    Route::post('/roles/updateCategory', 'AdminController@updateCategory')->name('updateCategory');
+    Route::post('/roles/deleteCategory', 'AdminController@deleteCategory')->name('deleteCategory');
 
     Route::get('/expenses', 'AdminController@expenses')->name('expenses');
     Route::post('/expenses/addExpense', 'AdminController@addExpense')->name('addExpense');
+    Route::post('/roles/updateExpense', 'AdminController@updateExpense')->name('updateExpense');
+    Route::post('/roles/deleteExpense', 'AdminController@deleteExpense')->name('deleteExpense');
 
 });
 

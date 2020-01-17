@@ -109,6 +109,35 @@ class AdminController extends Controller
         return redirect()->back();
     }
 
+    public function updateUser(Request $request)
+    {
+        $this->validate($request,[
+            'name' => 'required',
+            'email' => 'required|email',
+            'roleSelect' => 'required',
+        ]);
+
+        $role = Role::where('name', $request->input('roleSelect'))->first();
+        
+        $user = User::where('id', $request->input('userId'))->first();
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->role_id = $role->id;
+
+        $user->save();
+
+        return redirect()->back();
+    }
+
+    public function deleteUser(Request $request)
+    {
+        $user = User::where('id', $request->input('userId'))->first();
+
+        $user->delete();
+
+        return redirect()->back();
+    }
+
     public function category()
     {
         $categories = Category::all();
@@ -131,6 +160,32 @@ class AdminController extends Controller
 
         return redirect()->back();
 
+    }
+
+    public function updateCategory(Request $request)
+    {
+        $this->validate($request,[
+            'displayName' => 'required',
+            'description' => 'required',
+        ]);
+
+        $category = Category::where('id', $request->input('categoryId'))->first();
+
+        $category->name = $request->input('displayName');
+        $category->description = $request->input('description');
+
+        $category->save();
+
+        return redirect()->back();
+    }
+
+    public function deleteCategory(Request $request)
+    {
+        $category = Category::where('id', $request->input('categoryId'))->first();
+
+        $category->delete();
+
+        return redirect()->back();
     }
 
     public function expenses()
@@ -163,5 +218,35 @@ class AdminController extends Controller
 
         return redirect()->back();
 
+    }
+
+    public function updateExpense(Request $request)
+    {
+        $this->validate($request,[
+            'category'  => 'required',
+            'amount'    => 'required',
+            'entry'     => 'required',
+        ]);
+
+        $category = Category::where('name', $request->input('category'))->first();
+
+        $expense = Expense::where('id', $request->input('expenseId'))->first();
+
+        $expense->category_id = $category->id;
+        $expense->amount = $request->input('amount');
+        $expense->entry_date = $request->input('entry');
+
+        $expense->save();
+
+        return redirect()->back();
+    }
+
+    public function deleteExpense(Request $request)
+    {
+        $expense = Expense::where('id', $request->input('expenseId'))->first();
+
+        $expense->delete();
+
+        return redirect()->back();
     }
 }
