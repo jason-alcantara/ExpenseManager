@@ -37,18 +37,14 @@
                         </tr>
                     </thead>
                     <tbody>
+                      @foreach($expenses as $expense)
                         <tr>
-                            <td>Travel</td>
-                            <td>$230</td>
-                            <td>2019-03-21</td>
-                            <td>2019-03-21</td>
+                            <td>{{ $expense->category->name }}</td>
+                            <td>${{ $expense->amount }}</td>
+                            <td>{{ $expense->entry_date }}</td>
+                            <td>{{ \Carbon\Carbon::parse($expense->created_at)->toDateString() }}</td>
                         </tr>
-                        <tr>
-                            <td>Travel</td>
-                            <td>$120</td>
-                            <td>2019-03-21</td>
-                            <td>2019-03-21</td>
-                        </tr>
+                      @endforeach
                     </tbody>
                     </table>
                 </div>

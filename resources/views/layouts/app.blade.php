@@ -45,7 +45,7 @@
         <a class="nav-link disabled">Welcome to Expense Manager</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Logout</a>
+        <a href="{{ url('/logout') }}" class="nav-link">Logout</a>
       </li>
     </ul>
   </nav>
@@ -63,7 +63,7 @@
           <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Juan Dela Cruz</a>
+          <a href="#" class="d-block">{{ Auth::user()->name }}</a>
         </div>
       </div>
 

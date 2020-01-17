@@ -29,19 +29,17 @@
                     <table class="table table-bordered">
                     <thead>                  
                         <tr>
-                        <th>Expense Categories</th>
-                        <th>Total</th>
+                          <th>Expense Categories</th>
+                          <th>Total</th>
                         </tr>
                     </thead>
                     <tbody>
+                    @foreach($expenses as $expense)
                         <tr>
-                        <td>Category A</td>
-                        <td>$350.00</td>
+                          <td>{{ $expense }}</td>
+                          <td></td>
                         </tr>
-                        <tr>
-                        <td>Category B</td>
-                        <td>$120.25</td>
-                        </tr>
+                    @endforeach
                     </tbody>
                     </table>
                 </div>

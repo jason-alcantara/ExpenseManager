@@ -7,18 +7,26 @@ use App\Role;
 use App\Category;
 use App\User;
 use App\Expense;
+use Auth;
 
 class AdminController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
 
     public function index()
     {
-        return view('admin.dashboard');
+        $expenses = Expense::where('user_id', Auth::user()->id)->get()
+                                        ->groupBy('category_id');
+        return view('admin.dashboard', ['expenses' => $expenses]);
     }
+
+    public function logout(Request $request) {
+        Auth::logout();
+        return redirect('/');
+      }
 
     public function roles()
     {
@@ -42,6 +50,32 @@ class AdminController extends Controller
 
         return redirect()->back();
 
+    }
+
+    public function updateRole(Request $request)
+    {
+        $this->validate($request,[
+            'updateName' => 'required',
+            'updateDesc' => 'required',
+        ]);
+
+        $role = Role::where('id', $request->input('roleId'))->first();
+
+        $role->name = $request->input('updateName');
+        $role->description = $request->input('updateDesc');
+
+        $role->save();
+
+        return redirect()->back();
+    }
+
+    public function deleteRole(Request $request)
+    {
+        $role = Role::where('id', $request->input('roleId'))->first();
+
+        $role->delete();
+
+        return redirect()->back();
     }
 
     public function users()
@@ -102,7 +136,9 @@ class AdminController extends Controller
     public function expenses()
     {
         $categories = Category::all();
-        return view('admin.expense.expenses', ['categories' => $categories]);
+        $expenses = Expense::where('user_id', Auth::user()->id)->get();
+        return view('admin.expense.expenses', ['categories' => $categories,
+                                               'expenses'   => $expenses ]);
     }
 
     public function addExpense(Request $request)
@@ -114,8 +150,16 @@ class AdminController extends Controller
         ]);
 
         $category = \App\Category::where('name', $request->input('category'))->first();
+        $user = Auth::user()->id;
 
         $expense = new Expense;
+
+        $expense->user_id = $user;
+        $expense->category_id = $category->id;
+        $expense->amount = $request->input('amount');
+        $expense->entry_date = $request->input('entry');
+
+        $expense->save();
 
         return redirect()->back();
 

@@ -21,4 +21,9 @@ class Expense extends Model
     {
         return $this->belongsTo('App\Category');
     }
+
+    public function getCategory()
+    {
+        return $this->category->getName();
+    }
 }
