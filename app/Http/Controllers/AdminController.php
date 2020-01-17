@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Charts\PieChart;
 use App\Role;
 use App\Category;
 use App\User;
 use App\Expense;
 use Auth;
+use DB;
 
 class AdminController extends Controller
 {
@@ -18,9 +20,22 @@ class AdminController extends Controller
 
     public function index()
     {
-        $expenses = Expense::where('user_id', Auth::user()->id)->get()
-                                        ->groupBy('category_id');
-        return view('admin.dashboard', ['expenses' => $expenses]);
+        $expenses = DB::table('expenses')->where('user_id', Auth::user()->id)
+                                        ->select('category_id','amount')
+                                        ->get();
+
+        $totals = $expenses->groupBy('category_id');
+
+        $chart = new PieChart;
+        
+        foreach($totals as $key => $value)
+        {
+            $chart->labels(["Expense Category"]);
+            $chart->dataset($value[0]->category_id, 'bar', [$value->sum('amount')]);
+        }
+
+        return view('admin.dashboard')->with('totals', $totals)
+                                      ->with('chart', $chart);
     }
 
     public function logout(Request $request) {

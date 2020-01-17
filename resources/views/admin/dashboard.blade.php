@@ -34,10 +34,10 @@
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach($expenses as $expense)
+                    @foreach($totals as $total)
                         <tr>
-                          <td>{{ $expense }}</td>
-                          <td></td>
+                          <td>{{ $total[0]->category_id }}</td>
+                          <td>{{ $total->sum('amount') }}</td>
                         </tr>
                     @endforeach
                     </tbody>
@@ -47,27 +47,12 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <!-- PIE CHART -->
-                <div class="card card-danger">
-                <div class="card-header">
-                    <h3 class="card-title">Pie Chart</h3>
-
-                    <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
-                    </button>
-                    <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-                </div>
-                <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
+              {{ $chart->container() }}
             </div>
         </div>
       </div><!-- /.container-fluid -->
     </section>
+    {{ $chart->script() }}
     <!-- /.content -->
 @endsection
 

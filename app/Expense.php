@@ -24,6 +24,6 @@ class Expense extends Model
 
     public function getCategory()
     {
-        return $this->category->getName();
+        return $this->category->name;
     }
 }
